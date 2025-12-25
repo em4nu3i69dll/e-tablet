@@ -2,6 +2,13 @@
 
 Sistema basico de tablet para FiveM QB/ESX 
 
+## FOTOS DE LA TABLET 
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50840d52-78dc-4ffd-a8bb-e27e67ca29f4" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/07edadf8-d1d4-4df8-b074-50bb2ea70eff" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f46c01cc-36b5-48ce-adcb-61647f082848" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2e1cfcbc-51a9-4301-9b6e-c6ce77adf474" />
+
 ## ✨ Características
 
 - 🔄 **Multi-Framework**: Compatible con ESX y QBCore
