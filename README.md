@@ -90,5 +90,5 @@ Este proyecto esta libre para que lo utilicen de la forma que mas les guste, son
 - Website: https://em4nu3l69dll.dev/
 - GitHub: https://github.com/em4nu3i69dll
 
-⭐ Si te gusta este recurso, no olvides darle una estrella en GitHub!
+⭐ Si te gusta este recurso, no olvides darle una estrella
 
