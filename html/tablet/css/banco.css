@@ -1,0 +1,483 @@
+@keyframes movimientoCircular {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#app-banco {
+    background: transparent;
+}
+
+#app-banco .contenedor {
+    background: linear-gradient(180deg, rgba(199, 64, 64, 0.08) 0%, rgba(31, 5, 5, 0.12) 100%);
+    border-radius: 20px;
+    margin: 1vh;
+    padding: 4vh 5vh;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+    width: calc(100% - 2vh);
+    height: calc(100% - 2vh);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.tarjeta-saldo-banco {
+    width: 100%;
+}
+
+.tarjeta-saldo-banco .caja-estadistica {
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 1.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5vh;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(31, 5, 5, 0.1);
+    transition: all 0.2s ease;
+}
+
+.tarjeta-saldo-banco .caja-estadistica:hover {
+    transform: translateY(-2px);
+    background: #f5f5f5;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-color: rgba(138, 32, 32, 0.2);
+}
+
+.tarjeta-saldo-banco .caja-estadistica .caja-icono {
+    background: white;
+    width: 4.5vh;
+    height: 4.5vh;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vh;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.tarjeta-saldo-banco .caja-estadistica .caja-icono i {
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tarjeta-saldo-banco .caja-estadistica .detalles-estadistica {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+}
+
+.tarjeta-saldo-banco .caja-estadistica .etiqueta {
+    font-size: 1.1vh;
+    color: #9E8F94;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.boton-transferir-pequeño {
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 1.2vh 2.5vh;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.3vh;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.8vh;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(232, 85, 85, 0.25);
+}
+
+.boton-transferir-pequeño:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(232, 85, 85, 0.35);
+}
+
+.boton-transferir-pequeño i {
+    font-size: 1.4vh;
+}
+
+.tarjeta-saldo-banco .caja-estadistica .valor,
+.tarjeta-saldo-banco .caja-estadistica #saldo-banco,
+#app-banco #saldo-banco,
+.tarjeta-saldo-banco #saldo-banco {
+    font-size: 2vh !important;
+    font-weight: 800 !important;
+    color: #4A3F42 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #4A3F42 !important;
+    background-clip: unset !important;
+    text-shadow: none !important;
+    letter-spacing: -0.5px !important;
+    line-height: 1.1 !important;
+    opacity: 1 !important;
+}
+
+.seccion-transacciones-banco {
+    grid-column: 1 / -1;
+    background: white;
+    border-radius: 15px;
+    padding: 1.8vh;
+    border: none;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 50vh;
+    margin-top: 1.5vh;
+    width: 100%;
+}
+
+.seccion-transacciones-banco .titulo-seccion {
+    font-size: 1.6vh;
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    margin-bottom: 2vh;
+    padding-bottom: 0;
+    border: none;
+    letter-spacing: 1px;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+}
+
+.seccion-transacciones-banco .titulo-seccion i {
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.6vh;
+}
+
+.lista-transacciones-banco {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-right: 1vh;
+}
+
+.contenedor-busqueda-banco {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.entrada-busqueda-banco {
+    background: #fafafa;
+    border: 1px solid rgba(31, 5, 5, 0.15);
+    border-radius: 10px;
+    padding: 0.8vh 3vh 0.8vh 1.2vh;
+    font-size: 1.3vh;
+    color: #4A3F42;
+    width: 20vh;
+    transition: all 0.2s ease;
+    font-family: fuente, sans-serif;
+}
+
+.entrada-busqueda-banco:focus {
+    outline: none;
+    border-color: rgba(232, 85, 85, 0.5);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(232, 85, 85, 0.15);
+}
+
+.entrada-busqueda-banco::placeholder {
+    color: #9E8F94;
+}
+
+.icono-busqueda-banco {
+    position: absolute;
+    right: 1vh;
+    color: #9E8F94;
+    font-size: 1.3vh;
+    pointer-events: none;
+}
+
+.lista-transacciones-banco::-webkit-scrollbar {
+    width: 0.8vh;
+}
+
+.lista-transacciones-banco::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.lista-transacciones-banco::-webkit-scrollbar-thumb {
+    background: rgba(232, 85, 85, 0.6);
+    border-radius: 10px;
+}
+
+.lista-transacciones-banco::-webkit-scrollbar-thumb:hover {
+    background: rgba(232, 85, 85, 0.8);
+}
+
+.item-transaccion-banco {
+    display: flex;
+    align-items: center;
+    gap: 1.8vh;
+    padding: 1.5vh 2vh;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid rgba(31, 5, 5, 0.08);
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 1vh;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.item-transaccion-banco:hover {
+    background: #f5f5f5;
+    transform: translateX(3px);
+    border-color: rgba(138, 32, 32, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.icono-transaccion-banco {
+    width: 4.5vh;
+    height: 4.5vh;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2vh;
+    flex-shrink: 0;
+}
+
+.icono-transaccion-banco.cantidad-positiva-banco {
+    background: rgba(46, 213, 115, 0.2);
+    color: #2ed573;
+    border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+.icono-transaccion-banco.cantidad-negativa-banco {
+    background: rgba(255, 71, 87, 0.2);
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+.info-transaccion-banco {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2vh;
+    min-width: 0;
+}
+
+.tipo-transaccion-banco {
+    font-size: 1.4vh;
+    font-weight: 600;
+    color: #4A3F42;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.fecha-transaccion-banco {
+    font-size: 1.1vh;
+    color: #9E8F94;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.cantidad-transaccion-banco {
+    font-size: 1.6vh;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.cantidad-transaccion-banco.cantidad-positiva-banco {
+    color: #2ed573;
+    font-weight: 800;
+}
+
+.cantidad-transaccion-banco.cantidad-negativa-banco {
+    color: #ff4757;
+    font-weight: 800;
+}
+
+.transacciones-vacias-banco {
+    text-align: center;
+    padding: 4vh;
+    color: #9E8F94;
+    font-size: 1.5vh;
+}
+
+.cargando-banco {
+    text-align: center;
+    padding: 4vh;
+    color: #9E8F94;
+    font-size: 1.5vh;
+}
+
+.modal-banco {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenido-modal-banco {
+    background: linear-gradient(180deg, rgba(250, 250, 250, 0.98) 0%, rgba(245, 245, 245, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 4vh;
+    box-shadow: 0 10px 40px rgba(31, 5, 5, 0.3), inset 0 0 0 2px rgba(232, 85, 85, 0.2);
+    border: 1px solid rgba(138, 32, 32, 0.2);
+    width: 45%;
+    max-width: 500px;
+}
+
+.encabezado-modal-banco {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3vh;
+    padding-bottom: 2vh;
+    border-bottom: 2px solid rgba(138, 32, 32, 0.15);
+}
+
+.encabezado-modal-banco h3 {
+    font-size: 2.2vh;
+    font-weight: 700;
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.cerrar-modal-banco {
+    color: #8A2020;
+    font-size: 1.8vh;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 3.5vh;
+    height: 3.5vh;
+    min-width: 3.5vh;
+    min-height: 3.5vh;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(138, 32, 32, 0.1);
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.cerrar-modal-banco::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.cerrar-modal-banco:hover {
+    color: #C74040;
+    background: rgba(138, 32, 32, 0.2);
+    transform: scale(1.1);
+}
+
+.cuerpo-modal-banco {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vh;
+}
+
+.grupo-entrada-banco {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.grupo-entrada-banco label {
+    font-size: 1.3vh;
+    color: #4A3F42;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.grupo-entrada-banco input {
+    background: #fafafa;
+    border: 2px solid rgba(138, 32, 32, 0.15);
+    border-radius: 12px;
+    padding: 1.8vh;
+    color: #4A3F42;
+    font-size: 1.6vh;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.grupo-entrada-banco input:focus {
+    outline: none;
+    border-color: #E85555;
+    box-shadow: 0 0 0 3px rgba(232, 85, 85, 0.15);
+    background: #ffffff;
+}
+
+.boton-confirmar-banco {
+    background: linear-gradient(135deg, #E85555 0%, #8A2020 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 2vh;
+    color: #ffffff;
+    font-size: 1.6vh;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1vh;
+    box-shadow: 0 4px 15px rgba(232, 85, 85, 0.3);
+}
+
+.boton-confirmar-banco:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(232, 85, 85, 0.5);
+}
+
+.boton-confirmar-banco:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

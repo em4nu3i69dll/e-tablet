@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Tablet</title>
+    <link rel="stylesheet" href="./css/estilos.css">
+    <link rel="stylesheet" href="./css/banco.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css">
+    <audio id="sonido-apertura" preload="auto">
+        <source src="./sounds/pop1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sonido-cambio" preload="auto">
+        <source src="./sounds/pop4.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sonido-click" preload="auto">
+        <source src="./sounds/pop6.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sonido-cierre" preload="auto">
+        <source src="./sounds/pop8.mp3" type="audio/mpeg">
+    </audio>
+</head>
+<body>
+    <div class="contenedor-tablet" style="display: none;">
+        <div class="pantalla-tablet">
+            
+            <div class="barra-estado">
+                <div class="hora" id="hora-estado">12:00</div>
+                <div class="iconos-estado">
+                    <i class="fas fa-signal"></i>
+                    <span>4G</span>
+                    <span class="nivel-bateria">100%</span>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+
+            <div class="pantalla-bloqueo">
+                <div class="encabezado-bloqueo">
+                    <div class="icono-bloqueo"><i class="fas fa-lock"></i></div>
+                    <div class="fecha-bloqueo" id="fecha-bloqueo">Domingo, 12 de Enero</div>
+                    <div class="hora-bloqueo" id="hora-bloqueo">12:00</div>
+                </div>
+                
+                <div class="area-deslizar" id="area-deslizar">
+                    <div class="barra-deslizar"></div>
+                </div>
+            </div>
+            
+            <div class="pagina-info" style="display: none;">
+                <div class="contenedor-dock">
+                    <div class="barra-dock">
+                        <div class="dock-separador"></div>
+                        
+                        <div class="item-dock" id="dock-banco" data-tooltip="Banco">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        
+                        <div class="dock-separador"></div>
+
+                        <div class="item-dock activo" id="inicio" data-tooltip="Inicio">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        
+                        <div class="dock-separador"></div>
+
+                        <div class="item-dock" id="facturas" data-tooltip="Facturas">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contenido-app">
+                    <div id="app-inicio" class="seccion-app activa">
+                        <div class="contenedor">
+                            <div class="encabezado-pagina">
+                                <i class="fas fa-user-circle"></i>
+                                <span>MI IDENTIDAD</span>
+                            </div>
+
+                            <div class="cuadricula-dashboard">
+                                <div class="tarjeta-perfil">
+                                    <div class="contenedor-foto">
+                                        <img id="foto-jugador" src="" alt="">
+                                    </div>
+                                    <div class="info-perfil">
+                                        <span class="nombre">Cargando...</span>
+                                        <div class="trabajo">
+                                            <span id="trabajo">Cargando...</span>
+                                            <span id="grado"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="columna-derecha">
+                                    <div class="cuadricula-estadisticas pequeña">
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-wallet"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">Efectivo</span>
+                                                <span class="valor" id="efectivo">$0</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-university"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">Banco</span>
+                                                <span class="valor" id="banco">$0</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">Teléfono</span>
+                                                <span class="valor" id="telefono">N/A</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-id-card"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">Pasaporte</span>
+                                                <span class="valor" id="ciudadano">N/A</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-fingerprint"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">ID</span>
+                                                <span class="valor" id="id-jugador">N/A</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="caja-estadistica">
+                                            <div class="caja-icono">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div class="detalles-estadistica">
+                                                <span class="etiqueta">Conectados</span>
+                                                <span class="valor" id="total-jugadores">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="seccion-servicios">
+                                        <div class="titulo-seccion">SERVICIOS ACTIVOS</div>
+                                        <div class="cuadricula-servicios">
+                                            <div class="tarjeta-servicio">
+                                                <div class="icono-servicio policia">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </div>
+                                                <div class="info-servicio">
+                                                    <span class="nombre-servicio">POLICÍA</span>
+                                                    <span class="conteo-servicio" id="conteo-policia">0</span>
+                                                </div>
+                                            </div>
+                                            <div class="tarjeta-servicio">
+                                                <div class="icono-servicio ems">
+                                                    <i class="fas fa-ambulance"></i>
+                                                </div>
+                                                <div class="info-servicio">
+                                                    <span class="nombre-servicio">EMS</span>
+                                                    <span class="conteo-servicio" id="conteo-ems">0</span>
+                                                </div>
+                                            </div>
+                                            <div class="tarjeta-servicio">
+                                                <div class="icono-servicio mecanico">
+                                                    <i class="fas fa-wrench"></i>
+                                                </div>
+                                                <div class="info-servicio">
+                                                    <span class="nombre-servicio">MECÁNICO</span>
+                                                    <span class="conteo-servicio" id="conteo-mecanico">0</span>
+                                                </div>
+                                            </div>
+                                            <div class="tarjeta-servicio">
+                                                <div class="icono-servicio taxi">
+                                                    <i class="fas fa-taxi"></i>
+                                                </div>
+                                                <div class="info-servicio">
+                                                    <span class="nombre-servicio">TAXI</span>
+                                                    <span class="conteo-servicio" id="conteo-taxi">0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="app-banco" class="seccion-app">
+                        <div class="contenedor">
+                            <div class="encabezado-pagina">
+                                <i class="fas fa-university"></i>
+                                <span>MI BANCO</span>
+                            </div>
+                            
+                            <div class="cuadricula-dashboard" style="display: flex; flex-direction: column; height: 100%; gap: 1.5vh;">
+                                <div class="tarjeta-saldo-banco">
+                                    <div class="caja-estadistica">
+                                        <div class="caja-icono">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="detalles-estadistica">
+                                            <span class="etiqueta">Saldo Disponible</span>
+                                            <span class="valor" id="saldo-banco">$ 0</span>
+                                        </div>
+                                        <button class="boton-transferir-pequeño" id="boton-transferir-banco">
+                                            <i class="fas fa-paper-plane"></i>
+                                            <span>Transferir</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="seccion-transacciones-banco" style="flex: 1; overflow: hidden;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2vh;">
+                                        <div class="titulo-seccion">
+                                            <i class="fas fa-history"></i>
+                                            ÚLTIMOS MOVIMIENTOS
+                                        </div>
+                                        <div class="contenedor-busqueda-banco">
+                                            <input type="text" id="entrada-busqueda-banco" class="entrada-busqueda-banco" placeholder="Buscar por monto...">
+                                            <i class="fas fa-search icono-busqueda-banco"></i>
+                                        </div>
+                                    </div>
+                                    <div class="lista-transacciones-banco" id="lista-transacciones-banco">
+                                        <div class="cargando-banco">Cargando movimientos...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-banco" id="modal-transferir-banco" style="display: none;">
+                            <div class="contenido-modal-banco">
+                                <div class="encabezado-modal-banco">
+                                    <h3>Transferencia</h3>
+                                    <i class="fas fa-times cerrar-modal-banco" data-modal="transferir"></i>
+                                </div>
+                                <div class="cuerpo-modal-banco">
+                                    <div class="grupo-entrada-banco">
+                                        <label>ID del Destinatario</label>
+                                        <input type="text" placeholder="ID (CitizenID/Identifier)" id="entrada-transferir-id">
+                                    </div>
+                                    <div class="grupo-entrada-banco">
+                                        <label>Cantidad ($)</label>
+                                        <input type="number" placeholder="Cantidad" id="entrada-transferir-cantidad">
+                                    </div>
+                                    <button class="boton-confirmar-banco" id="confirmar-transferir-banco" disabled>ENVIAR FONDOS</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="app-facturas" class="seccion-app">
+                        <div class="contenedor">
+                            <div class="encabezado-pagina">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>FACTURAS</span>
+                            </div>
+                            <div class="lista-facturas" id="lista-facturas">
+                                <div class="estado-vacio">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Cargando facturas...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./js/script.js"></script>
+</body>
+</html>
