@@ -23,7 +23,6 @@ elseif Configuracion.Tablet.Framework == 'qb' then
 end
 
 if not Framework then
-    print('^1[E-TABLET]^7 Error: No se pudo detectar el framework')
     return
 end
 
@@ -52,11 +51,8 @@ end)
 
 function AbrirTablet()
     if tabletAbierta then return end
-    
     tabletAbierta = true
-    
     ReproducirAnimacion()
-    
     TriggerServerEvent('e-tablet:obtenerDatosJugador')
 end
 
@@ -136,17 +132,13 @@ RegisterNUICallback('obtenerDatosBanco', function(datos, cb)
     if Framework == 'esx' then
         ESX.TriggerServerCallback('e-tablet:obtenerDatosBanco', function(datosBanco)
             local headshotTxd = CrearHeadshotPed()
-            if headshotTxd then
-                datosBanco.headshot = headshotTxd
-            end
+            if headshotTxd then datosBanco.headshot = headshotTxd end
             cb(datosBanco)
         end)
     else
         QBCore.Functions.TriggerCallback('e-tablet:obtenerDatosBanco', function(datosBanco)
             local headshotTxd = CrearHeadshotPed()
-            if headshotTxd then
-                datosBanco.headshot = headshotTxd
-            end
+            if headshotTxd then datosBanco.headshot = headshotTxd end
             cb(datosBanco)
         end)
     end
@@ -162,52 +154,6 @@ RegisterNUICallback('obtenerResumenBanco', function(datos, cb)
             cb(datosResumen)
         end)
     end
-end)
-
-RegisterNUICallback('obtenerHistorialBanco', function(datos, cb)
-    if Framework == 'esx' then
-        ESX.TriggerServerCallback('e-tablet:obtenerHistorialBanco', function(datosHistorial)
-            cb(datosHistorial)
-        end)
-    else
-        QBCore.Functions.TriggerCallback('e-tablet:obtenerHistorialBanco', function(datosHistorial)
-            cb(datosHistorial)
-        end)
-    end
-end)
-
-RegisterNUICallback('obtenerPINBanco', function(datos, cb)
-    if Framework == 'esx' then
-        ESX.TriggerServerCallback('e-tablet:obtenerPINBanco', function(datosPIN)
-            cb(datosPIN)
-        end)
-    else
-        QBCore.Functions.TriggerCallback('e-tablet:obtenerPINBanco', function(datosPIN)
-            cb(datosPIN)
-        end)
-    end
-end)
-
-RegisterNUICallback('accionBanco', function(datos, cb)
-    local accion = datos.accion
-    local cantidad = datos.cantidad
-    local idDestinatario = datos.idDestinatario
-    local iban = datos.iban
-    local pin = datos.pin
-    
-    if accion == 'depositar' and cantidad then
-        TriggerServerEvent('e-tablet:depositarBanco', cantidad)
-    elseif accion == 'retirar' and cantidad then
-        TriggerServerEvent('e-tablet:retirarBanco', cantidad)
-    elseif accion == 'transferir' and cantidad and idDestinatario then
-        TriggerServerEvent('e-tablet:transferirBanco', cantidad, idDestinatario)
-    elseif accion == 'cambiarIBAN' and iban then
-        TriggerServerEvent('e-tablet:cambiarIBAN', iban)
-    elseif accion == 'cambiarPIN' and pin then
-        TriggerServerEvent('e-tablet:cambiarPIN', pin)
-    end
-    
-    cb('ok')
 end)
 
 RegisterNUICallback('obtenerFacturas', function(datos, cb)
@@ -229,29 +175,18 @@ RegisterNUICallback('pagarFactura', function(datos, cb)
     cb('ok')
 end)
 
-RegisterNetEvent('e-tablet:actualizarSaldoBanco', function(saldo)
-    SendNUIMessage({
-        accion = 'actualizarSaldoBanco',
-        saldo = saldo
-    })
+RegisterNUICallback('accionBanco', function(datos, cb)
+    TriggerServerEvent('e-tablet:transferirBanco', datos.cantidad, datos.idDestinatario)
+    cb('ok')
 end)
 
 function CerrarTablet()
     if not tabletAbierta then return end
-    
     tabletAbierta = false
     SetNuiFocus(false, false)
-    
-    SendNUIMessage({
-        accion = 'cerrar',
-        mostrar = false
-    })
-    
-    if headshotActual then
-        UnregisterPedheadshot(headshotActual)
-        headshotActual = nil
-    end
-    
+    TriggerServerEvent('e-tablet:limpiarTest')
+    SendNUIMessage({ accion = 'cerrar', mostrar = false })
+    if headshotActual then UnregisterPedheadshot(headshotActual) headshotActual = nil end
     DetenerAnimacion()
 end
 
@@ -263,53 +198,22 @@ function ReproducirAnimacion()
     local hueso = Configuracion.Tablet.Animacion.hueso
     local pos = Configuracion.Tablet.Animacion.posicion
     local rot = Configuracion.Tablet.Animacion.rotacion
-    
     RequestAnimDict(diccionarioAnim)
-    while not HasAnimDictLoaded(diccionarioAnim) do
-        Wait(100)
-    end
-    
+    while not HasAnimDictLoaded(diccionarioAnim) do Wait(100) end
     RequestModel(modeloProp)
-    while not HasModelLoaded(modeloProp) do
-        Wait(100)
-    end
-    
+    while not HasModelLoaded(modeloProp) do Wait(100) end
     propTablet = CreateObject(GetHashKey(modeloProp), 0.0, 0.0, 0.0, true, true, true)
     AttachEntityToEntity(propTablet, jugadorPed, GetPedBoneIndex(jugadorPed, hueso), pos[1], pos[2], pos[3], rot[1], rot[2], rot[3], true, true, false, true, 1, true)
-    
     TaskPlayAnim(jugadorPed, diccionarioAnim, nombreAnim, 3.0, 3.0, -1, 49, 0, false, false, false)
 end
 
 function DetenerAnimacion()
     local jugadorPed = PlayerPedId()
     local diccionarioAnim = Configuracion.Tablet.Animacion.diccionario
-    
-    if propTablet then
-        DeleteObject(propTablet)
-        propTablet = nil
-    end
-    
+    if propTablet then DeleteObject(propTablet) propTablet = nil end
     StopAnimTask(jugadorPed, diccionarioAnim, Configuracion.Tablet.Animacion.animacion, 1.0)
     ClearPedTasks(jugadorPed)
 end
 
-RegisterNUICallback('escape', function(datos, cb)
-    CerrarTablet()
-    cb('ok')
-end)
-
-RegisterNUICallback('cerrar', function(datos, cb)
-    CerrarTablet()
-    cb('ok')
-end)
-
-AddEventHandler('onResourceStop', function(nombreRecurso)
-    if GetCurrentResourceName() == nombreRecurso then
-        if tabletAbierta then
-            CerrarTablet()
-        end
-        if headshotActual then
-            UnregisterPedheadshot(headshotActual)
-        end
-    end
-end)
+RegisterNUICallback('escape', function(datos, cb) CerrarTablet() cb('ok') end)
+RegisterNUICallback('cerrar', function(datos, cb) CerrarTablet() cb('ok') end)

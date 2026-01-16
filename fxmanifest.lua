@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 author 'https://em4nu3l69dll.dev/'
-description 'Sistema de tablet basico '
+description 'Sistema de tablet basico'
 version '1.0.0'
 license 'MIT'
 

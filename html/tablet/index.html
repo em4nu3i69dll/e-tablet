@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Tablet</title>
+    <title>Desarollado por EM4NU3L69dll</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/estilos.css">
     <link rel="stylesheet" href="./css/banco.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -26,7 +29,6 @@
 <body>
     <div class="contenedor-tablet" style="display: none;">
         <div class="pantalla-tablet">
-            
             <div class="barra-estado">
                 <div class="hora" id="hora-estado">12:00</div>
                 <div class="iconos-estado">
@@ -43,41 +45,38 @@
                     <div class="fecha-bloqueo" id="fecha-bloqueo">Domingo, 12 de Enero</div>
                     <div class="hora-bloqueo" id="hora-bloqueo">12:00</div>
                 </div>
-                
+
                 <div class="area-deslizar" id="area-deslizar">
+                    <div class="nombre-dispositivo">E-TABLET AIR</div>
                     <div class="barra-deslizar"></div>
                 </div>
             </div>
-            
+
             <div class="pagina-info" style="display: none;">
                 <div class="contenedor-dock">
                     <div class="barra-dock">
-                        <div class="dock-separador"></div>
-                        
                         <div class="item-dock" id="dock-banco" data-tooltip="Banco">
                             <i class="fas fa-university"></i>
                         </div>
-                        
                         <div class="dock-separador"></div>
-
-                        <div class="item-dock activo" id="inicio" data-tooltip="Inicio">
+                        <div class="item-dock activo" id="inicio" data-tooltip="Incio">
                             <i class="fas fa-home"></i>
                         </div>
-                        
                         <div class="dock-separador"></div>
-
                         <div class="item-dock" id="facturas" data-tooltip="Facturas">
                             <i class="fas fa-file-invoice-dollar"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="contenido-app">
                     <div id="app-inicio" class="seccion-app activa">
                         <div class="contenedor">
                             <div class="encabezado-pagina">
-                                <i class="fas fa-user-circle"></i>
-                                <span>MI IDENTIDAD</span>
+                                <div class="titulo-moderno">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Identidad Personal</span>
+                                </div>
                             </div>
 
                             <div class="cuadricula-dashboard">
@@ -95,9 +94,9 @@
                                 </div>
 
                                 <div class="columna-derecha">
-                                    <div class="cuadricula-estadisticas pequeña">
+                                    <div class="cuadricula-estadisticas">
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono efec">
                                                 <i class="fas fa-wallet"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -105,9 +104,9 @@
                                                 <span class="valor" id="efectivo">$0</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono banco">
                                                 <i class="fas fa-university"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -115,9 +114,9 @@
                                                 <span class="valor" id="banco">$0</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono tel">
                                                 <i class="fas fa-phone"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -127,7 +126,7 @@
                                         </div>
 
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono iden">
                                                 <i class="fas fa-id-card"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -135,9 +134,9 @@
                                                 <span class="valor" id="ciudadano">N/A</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono fingerprint">
                                                 <i class="fas fa-fingerprint"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -145,9 +144,9 @@
                                                 <span class="valor" id="id-jugador">N/A</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="caja-estadistica">
-                                            <div class="caja-icono">
+                                            <div class="caja-icono players">
                                                 <i class="fas fa-users"></i>
                                             </div>
                                             <div class="detalles-estadistica">
@@ -158,7 +157,7 @@
                                     </div>
 
                                     <div class="seccion-servicios">
-                                        <div class="titulo-seccion">SERVICIOS ACTIVOS</div>
+                                        <div class="titulo-seccion">SERVICIOS EN CIUDAD</div>
                                         <div class="cuadricula-servicios">
                                             <div class="tarjeta-servicio">
                                                 <div class="icono-servicio policia">
@@ -206,36 +205,35 @@
                     <div id="app-banco" class="seccion-app">
                         <div class="contenedor">
                             <div class="encabezado-pagina">
-                                <i class="fas fa-university"></i>
-                                <span>MI BANCO</span>
+                                <div class="titulo-moderno">
+                                    <i class="fas fa-university"></i>
+                                    <span>Estado Financiero</span>
+                                </div>
                             </div>
-                            
-                            <div class="cuadricula-dashboard" style="display: flex; flex-direction: column; height: 100%; gap: 1.5vh;">
+
+                            <div class="cuadricula-banco-moderna">
                                 <div class="tarjeta-saldo-banco">
-                                    <div class="caja-estadistica">
-                                        <div class="caja-icono">
-                                            <i class="fas fa-wallet"></i>
-                                        </div>
-                                        <div class="detalles-estadistica">
-                                            <span class="etiqueta">Saldo Disponible</span>
+                                    <div class="caja-estadistica-banco">
+                                        <div class="detalles-banco-central">
+                                            <span class="etiqueta">Saldo Total</span>
                                             <span class="valor" id="saldo-banco">$ 0</span>
                                         </div>
-                                        <button class="boton-transferir-pequeño" id="boton-transferir-banco">
+                                        <button class="boton-accion-banco" id="boton-transferir-banco">
                                             <i class="fas fa-paper-plane"></i>
                                             <span>Transferir</span>
                                         </button>
                                     </div>
                                 </div>
-                                
-                                <div class="seccion-transacciones-banco" style="flex: 1; overflow: hidden;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2vh;">
-                                        <div class="titulo-seccion">
+
+                                <div class="transacciones-contenedor">
+                                    <div class="encabezado-transacciones">
+                                        <div class="titulo-seccion-banco">
                                             <i class="fas fa-history"></i>
-                                            ÚLTIMOS MOVIMIENTOS
+                                            Movimientos Recientes
                                         </div>
-                                        <div class="contenedor-busqueda-banco">
-                                            <input type="text" id="entrada-busqueda-banco" class="entrada-busqueda-banco" placeholder="Buscar por monto...">
-                                            <i class="fas fa-search icono-busqueda-banco"></i>
+                                        <div class="contenedor-busqueda">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" id="entrada-busqueda-banco" placeholder="Buscar transacción...">
                                         </div>
                                     </div>
                                     <div class="lista-transacciones-banco" id="lista-transacciones-banco">
@@ -248,19 +246,22 @@
                         <div class="modal-banco" id="modal-transferir-banco" style="display: none;">
                             <div class="contenido-modal-banco">
                                 <div class="encabezado-modal-banco">
-                                    <h3>Transferencia</h3>
+                                    <h3>Nueva Transferencia</h3>
                                     <i class="fas fa-times cerrar-modal-banco" data-modal="transferir"></i>
                                 </div>
                                 <div class="cuerpo-modal-banco">
-                                    <div class="grupo-entrada-banco">
-                                        <label>ID del Destinatario</label>
-                                        <input type="text" placeholder="ID (CitizenID/Identifier)" id="entrada-transferir-id">
+                                    <div class="grupo-entrada">
+                                        <label>Identificador del Destinatario</label>
+                                        <input type="text" placeholder="CitizenID o Identificador" id="entrada-transferir-id">
                                     </div>
-                                    <div class="grupo-entrada-banco">
-                                        <label>Cantidad ($)</label>
-                                        <input type="number" placeholder="Cantidad" id="entrada-transferir-cantidad">
+                                    <div class="grupo-entrada">
+                                        <label>Monto a Enviar</label>
+                                        <div class="entrada-con-simbolo">
+                                            <span>$</span>
+                                            <input type="number" placeholder="0" id="entrada-transferir-cantidad">
+                                        </div>
                                     </div>
-                                    <button class="boton-confirmar-banco" id="confirmar-transferir-banco" disabled>ENVIAR FONDOS</button>
+                                    <button class="boton-confirmar-banco" id="confirmar-transferir-banco" disabled>CONTINUAR</button>
                                 </div>
                             </div>
                         </div>
@@ -269,13 +270,15 @@
                     <div id="app-facturas" class="seccion-app">
                         <div class="contenedor">
                             <div class="encabezado-pagina">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                <span>FACTURAS</span>
+                                <div class="titulo-moderno">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    <span>Gestión de Facturas</span>
+                                </div>
                             </div>
                             <div class="lista-facturas" id="lista-facturas">
                                 <div class="estado-vacio">
                                     <i class="fas fa-spinner fa-spin"></i>
-                                    <p>Cargando facturas...</p>
+                                    <p>Sincronizando con el servidor...</p>
                                 </div>
                             </div>
                         </div>
@@ -284,7 +287,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="./js/script.js"></script>
 </body>
 </html>

@@ -2,137 +2,133 @@ function reproducirSonido(tipo) {
     const sonido = document.getElementById(`sonido-${tipo}`);
     if (sonido) {
         sonido.currentTime = 0;
-        sonido.play().catch(e => console.log('Error reproduciendo sonido:', e));
+        sonido.play().catch(e => { });
     }
 }
 
-$(document).ready(function() {
-    
+$(document).ready(function () {
     $('.pagina-info').show();
     $('.pantalla-bloqueo').show();
-    
+
     let bloqueado = true;
-    
     let inicioY = 0;
     let arrastrando = false;
-    
-    $('#area-deslizar').on('mousedown touchstart', function(e) {
+
+    $('#area-deslizar').on('mousedown touchstart', function (e) {
         arrastrando = true;
         inicioY = e.pageY || e.originalEvent.touches[0].pageY;
     });
-    
-    $(document).on('mousemove touchmove', function(e) {
+
+    $(document).on('mousemove touchmove', function (e) {
         if (!arrastrando || !bloqueado) return;
-        
+
         let actualY = e.pageY || e.originalEvent.touches[0].pageY;
         let diferencia = inicioY - actualY;
-        
+
         if (diferencia > 0) {
             $('.pantalla-bloqueo').css('transform', `translateY(-${diferencia}px)`);
-            
             let opacidad = 1 - (diferencia / 300);
             if (opacidad < 0) opacidad = 0;
             $('.pantalla-bloqueo').css('opacity', opacidad);
         }
     });
-    
-    $(document).on('mouseup touchend', function(e) {
+
+    $(document).on('mouseup touchend', function (e) {
         if (!arrastrando) return;
         arrastrando = false;
-        
-        if (inicioY - (e.pageY || (e.originalEvent.changedTouches ? e.originalEvent.changedTouches[0].pageY : inicioY)) > 100) {
+
+        const finalY = e.pageY || (e.originalEvent.changedTouches ? e.originalEvent.changedTouches[0].pageY : inicioY);
+        if (inicioY - finalY > 100) {
             desbloquearTablet();
         } else {
-            $('.pantalla-bloqueo').css({'transform': 'translateY(0)', 'opacity': '1'});
+            $('.pantalla-bloqueo').css({ 'transform': 'translateY(0)', 'opacity': '1' });
         }
     });
-    
+
     function desbloquearTablet() {
         bloqueado = false;
         reproducirSonido('apertura');
-        $('.pantalla-bloqueo').css({'transform': 'translateY(-100%)', 'opacity': '0'});
+        $('.pantalla-bloqueo').css({ 'transform': 'translateY(-100%)', 'opacity': '0' });
         $('.pantalla-tablet').removeClass('bloqueado');
         setTimeout(() => {
             $('.pantalla-bloqueo').hide();
-        }, 500);
+        }, 600);
     }
-    
-    $('.item-dock').on('click', function() {
+
+    $('.item-dock').on('click', function () {
         const id = $(this).attr('id');
-        
+        if ($(this).hasClass('activo')) return;
+
         reproducirSonido('cambio');
-        
+
         $('.item-dock').removeClass('activo');
         $(this).addClass('activo');
-        
-        $('.seccion-app').fadeOut(200);
+
+        $('.seccion-app').fadeOut(150);
+
         setTimeout(() => {
-            let appId = id;
+            let appId = id === 'dock-banco' ? 'banco' : id;
+            $(`#app-${appId}`).fadeIn(250);
+
             if (id === 'dock-banco') {
-                appId = 'banco';
-            }
-            $(`#app-${appId}`).fadeIn(200);
-            
-            if (id === 'dock-banco') {
-                setTimeout(function() {
-                    cargarBancoSimple();
-                }, 100);
+                setTimeout(cargarBancoSimple, 50);
             } else if (id === 'facturas') {
-                setTimeout(function() {
-                    cargarFacturas();
-                }, 100);
+                setTimeout(cargarFacturas, 50);
             }
-        }, 200);
+        }, 150);
     });
 
-    $(document).on('click', '#boton-transferir-banco', function() {
+    $(document).on('click', '#boton-transferir-banco', function () {
         reproducirSonido('click');
-        $('#modal-transferir-banco').fadeIn(200);
+        $('#modal-transferir-banco').fadeIn(300);
     });
 
-    $(document).on('click', '.cerrar-modal-banco', function() {
+    $(document).on('click', '.cerrar-modal-banco', function () {
         reproducirSonido('click');
         const modal = $(this).data('modal');
-        $(`#modal-${modal}-banco`).fadeOut(200);
+        $(`#modal-${modal}-banco`).fadeOut(300);
     });
 
-    $(document).on('click', '#confirmar-transferir-banco', function() {
+    $(document).on('click', '#confirmar-transferir-banco', function () {
         const cantidad = parseInt($('#entrada-transferir-cantidad').val());
         const idDestinatario = $('#entrada-transferir-id').val().trim();
+
         if (cantidad && cantidad > 0 && idDestinatario) {
             $.post('https://e-tablet/accionBanco', JSON.stringify({
                 accion: 'transferir',
                 cantidad: cantidad,
                 idDestinatario: idDestinatario
-            }), function(respuesta) {
+            }), function (respuesta) {
                 if (respuesta && respuesta.exito !== false) {
                     cargarBancoSimple();
                 }
             });
-            $('#modal-transferir-banco').fadeOut(200);
+            $('#modal-transferir-banco').fadeOut(300);
             $('#entrada-transferir-cantidad').val('');
             $('#entrada-transferir-id').val('');
             $('#confirmar-transferir-banco').prop('disabled', true);
         }
     });
-    
-    $(document).on('input', '#entrada-transferir-cantidad, #entrada-transferir-id', function() {
+
+    $(document).on('input', '#entrada-transferir-cantidad, #entrada-transferir-id', function () {
         const cantidad = $('#entrada-transferir-cantidad').val();
         const idDestinatario = $('#entrada-transferir-id').val().trim();
         $('#confirmar-transferir-banco').prop('disabled', !(cantidad && cantidad > 0 && idDestinatario));
     });
 
-    $(document).on('input', '#entrada-busqueda-banco', function() {
-        const terminoBusqueda = $(this).val().trim().toLowerCase();
-        filtrarTransaccionesBanco(terminoBusqueda);
+    $(document).on('input', '#entrada-busqueda-banco', function () {
+        filtrarTransaccionesBanco($(this).val().trim().toLowerCase());
     });
-    
-    $(document).keyup(function(e) {
+
+    $(document).keyup(function (e) {
         if (e.keyCode == 27) {
             reproducirSonido('cierre');
-            $('.contenedor-tablet').css('display', 'none');
+            $('.contenedor-tablet').fadeOut(200, function () {
+                $('body').hide();
+                $('.notificacion').remove();
+            });
             if (window.parent && window.parent !== window) {
-                window.parent.postMessage({accion: 'cerrarTablet'}, '*');
+                window.parent.postMessage({ accion: 'cerrarTablet' }, '*');
             }
             $.post('https://e-tablet/escape', JSON.stringify({}));
         }
@@ -143,305 +139,216 @@ $(document).ready(function() {
         const horas = String(ahora.getHours()).padStart(2, '0');
         const minutos = String(ahora.getMinutes()).padStart(2, '0');
         const cadenaHora = `${horas}:${minutos}`;
-        
+
         $('#hora-estado').text(cadenaHora);
         $('#hora-bloqueo').text(cadenaHora);
-        
+
         const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         const cadenaFecha = `${dias[ahora.getDay()]}, ${ahora.getDate()} de ${meses[ahora.getMonth()]}`;
         $('#fecha-bloqueo').text(cadenaFecha);
     }
+
     setInterval(actualizarHora, 1000);
     actualizarHora();
 });
 
-window.addEventListener('message', function(event) {
-    if (event.data.accion === 'abrir' && event.data.mostrar == true) {
-        $('body').css('display', 'block')
-        $('.contenedor-tablet').css('display', 'flex')
-        
+window.addEventListener('message', function (event) {
+    const d = event.data;
+    if (d.accion === 'abrir' && d.mostrar == true) {
+        $('body').show();
+        $('.contenedor-tablet').css('display', 'flex').hide().fadeIn(300);
         $('.pagina-info').show();
-        $('.pantalla-bloqueo').show().css({'transform': 'translateY(0)', 'opacity': '1'});
+        $('.pantalla-bloqueo').show().css({ 'transform': 'translateY(0)', 'opacity': '1' });
         $('.pantalla-tablet').addClass('bloqueado');
-        
+
         $('.item-dock').removeClass('activo');
         $('#inicio').addClass('activo');
         $('.seccion-app').hide();
         $('#app-inicio').show();
-        
-        if (event.data.nombre) {
-            $('.nombre').html(event.data.nombre);
+
+        if (d.nombre) $('.nombre').html(d.nombre);
+        if (d.trabajo) $('#trabajo').html(d.trabajo);
+        if (d.grado) $('#grado').html(' • ' + d.grado);
+        if (d.efectivo !== undefined) $('#efectivo').html('$' + d.efectivo.toLocaleString());
+        if (d.banco !== undefined) $('#banco').html('$' + d.banco.toLocaleString());
+        if (d.telefono) $('#telefono').html(d.telefono);
+        if (d.ciudadano) $('#ciudadano').html(d.ciudadano);
+        if (d.id !== undefined) $('#id-jugador').html(d.id);
+        if (d.totalJugadores !== undefined) $('#total-jugadores').html(d.totalJugadores);
+
+        if (d.headshot) {
+            $('#foto-jugador').attr('src', `https://nui-img/${d.headshot}/${d.headshot}`);
+        } else {
+            $('#foto-jugador').attr('src', './img/default.png');
         }
-        
-        if (event.data.trabajo) {
-            $('#trabajo').html(event.data.trabajo);
-        }
-        
-        if (event.data.grado) {
-            $('#grado').html(' - ' + event.data.grado);
-        }
-        
-        if (event.data.efectivo !== undefined) {
-            $('#efectivo').html('$' + event.data.efectivo.toLocaleString());
-        }
-        
-        if (event.data.banco !== undefined) {
-            $('#banco').html('$' + event.data.banco.toLocaleString());
-        }
-        
-        if (event.data.telefono) {
-            $('#telefono').html(event.data.telefono);
-        }
-        
-        if (event.data.ciudadano) {
-            $('#ciudadano').html(event.data.ciudadano);
-        }
-        
-        if (event.data.id !== undefined) {
-            $('#id-jugador').html(event.data.id);
-        }
-        
-        if (event.data.totalJugadores !== undefined) {
-            $('#total-jugadores').html(event.data.totalJugadores);
-        }
-        
-        if (event.data.headshot) {
-            $('#foto-jugador').attr('src', 'https://nui-img/' + event.data.headshot + '/' + event.data.headshot);
-        }
-        
-        if (event.data.policia !== undefined) {
-            $('#conteo-policia').html(event.data.policia);
-        }
-        if (event.data.ems !== undefined) {
-            $('#conteo-ems').html(event.data.ems);
-        }
-        if (event.data.mecanico !== undefined) {
-            $('#conteo-mecanico').html(event.data.mecanico);
-        }
-        if (event.data.taxi !== undefined) {
-            $('#conteo-taxi').html(event.data.taxi);
-        }
-    } else if (event.data.accion == 'cerrar' || event.data.mostrar == false) {
+
+        if (d.policia !== undefined) $('#conteo-policia').html(d.policia);
+        if (d.ems !== undefined) $('#conteo-ems').html(d.ems);
+        if (d.mecanico !== undefined) $('#conteo-mecanico').html(d.mecanico);
+        if (d.taxi !== undefined) $('#conteo-taxi').html(d.taxi);
+
+    } else if (d.accion == 'cerrar' || d.mostrar == false) {
         reproducirSonido('cierre');
-        $('.contenedor-tablet').css('display', 'none')
-        $('body').css('display', 'none')
+        $('.contenedor-tablet').fadeOut(200, function () {
+            $('body').hide();
+            $('.notificacion').remove();
+        });
         $('#foto-jugador').attr('src', '');
-    } else if (event.data.accion == 'notificacion') {
-        mostrarNotificacion(event.data.tipo, event.data.mensaje);
-    } else if (event.data.accion == 'actualizarSaldoBanco') {
-        if (event.data.saldo !== undefined) {
-            $('#banco').html('$' + event.data.saldo.toLocaleString());
-        }
+    } else if (d.accion == 'notificacion') {
+        mostrarNotificacion(d.tipo, d.mensaje);
+    } else if (d.accion == 'actualizarSaldoBanco') {
+        if (d.saldo !== undefined) $('#banco').html('$' + d.saldo.toLocaleString());
     }
 });
 
-let datosUsuarioBanco = {
-    dineroBanco: 0,
-    identificador: ''
-};
-
+let datosUsuarioBanco = { dineroBanco: 0, identificador: '' };
 let todasTransaccionesBanco = [];
 
 function cargarBancoSimple() {
-    if (typeof event !== 'undefined' && event.data && event.data.banco !== undefined) {
-        datosUsuarioBanco.dineroBanco = event.data.banco || 0;
-        datosUsuarioBanco.identificador = event.data.ciudadano || '';
-        $('#saldo-banco').text('$' + datosUsuarioBanco.dineroBanco.toLocaleString());
-    } else {
-        $.post('https://e-tablet/obtenerDatosBanco', JSON.stringify({}), function(datos) {
-            if (datos) {
-                datosUsuarioBanco.dineroBanco = datos.dineroBanco || 0;
-                datosUsuarioBanco.identificador = datos.identificador || '';
-                $('#saldo-banco').text('$' + datosUsuarioBanco.dineroBanco.toLocaleString());
-            }
-        });
-    }
-    
-    $.post('https://e-tablet/obtenerResumenBanco', JSON.stringify({}), function(datos) {
-        const transacciones = datos.transacciones || [];
-        todasTransaccionesBanco = transacciones;
-        
+    $('#lista-transacciones-banco').html('<div class="estado-lista-vacia"><i class="fas fa-spinner fa-spin"></i><p>Sincronizando movimientos bancarios...</p></div>');
+
+    $.post('https://e-tablet/obtenerDatosBanco', JSON.stringify({}), function (datos) {
+        if (datos) {
+            datosUsuarioBanco.dineroBanco = datos.dineroBanco || 0;
+            datosUsuarioBanco.identificador = datos.identificador || '';
+            $('#saldo-banco').text('$' + datosUsuarioBanco.dineroBanco.toLocaleString());
+        }
+    });
+
+    $.post('https://e-tablet/obtenerResumenBanco', JSON.stringify({}), function (datos) {
+        todasTransaccionesBanco = datos.transacciones || [];
         $('#entrada-busqueda-banco').val('');
-        
-        renderizarTransaccionesBanco(transacciones);
-    }).fail(function() {
-        $('#lista-transacciones-banco').html('<div class="transacciones-vacias-banco">Error al cargar movimientos</div>');
+        renderizarTransaccionesBanco(todasTransaccionesBanco);
+    }).fail(function () {
+        $('#lista-transacciones-banco').html('<div class="estado-lista-vacia"><i class="fas fa-exclamation-triangle"></i><p>Error de conexión bancaria</p></div>');
     });
 }
 
 function renderizarTransaccionesBanco(transacciones) {
+    const list = $('#lista-transacciones-banco');
     if (transacciones.length === 0) {
-        $('#lista-transacciones-banco').html('<div class="transacciones-vacias-banco">No se encontraron movimientos</div>');
+        list.html('<div class="estado-lista-vacia"><i class="fas fa-history"></i><p>No hay movimientos registrados en esta cuenta todavía.</p></div>');
         return;
     }
-    
-    let htmlTransacciones = '';
-    const num = transacciones.length > 10 ? 10 : transacciones.length;
-    
-    for (let i = 0; i < num; i++) {
-        const t = transacciones[i];
+
+    let html = '';
+    const items = transacciones.slice(0, 30);
+
+    items.forEach(t => {
         const tipo = t.type || 'transfer';
         const cantidad = parseFloat(t.value || 0);
         const esPositivo = tipo === 'deposit' || (tipo === 'transfer' && t.receiver_identifier === (datosUsuarioBanco.identificador || ''));
-        const icono = esPositivo ? 'fa-arrow-down' : 'fa-arrow-up';
-        const claseCantidad = esPositivo ? 'cantidad-positiva-banco' : 'cantidad-negativa-banco';
-        const textoCantidad = esPositivo ? `+$${cantidad.toLocaleString()}` : `-$${Math.abs(cantidad).toLocaleString()}`;
-        
-        let textoTipo = '';
-        if (tipo === 'deposit') textoTipo = 'Depósito';
-        else if (tipo === 'withdraw') textoTipo = 'Retiro';
+        const icono = esPositivo ? 'fa-plus-circle' : 'fa-minus-circle';
+        const clase = esPositivo ? 'cantidad-positiva-banco' : 'cantidad-negativa-banco';
+        const monto = esPositivo ? `+$${cantidad.toLocaleString()}` : `-$${Math.abs(cantidad).toLocaleString()}`;
+
+        let label = 'Operación';
+        if (tipo === 'deposit') label = 'Depósito';
+        else if (tipo === 'withdraw') label = 'Retiro de Efectivo';
         else if (tipo === 'transfer') {
-            if (t.receiver_identifier === (datosUsuarioBanco.identificador || '')) {
-                textoTipo = `Transferencia de ${t.sender_name || 'Usuario'}`;
-            } else {
-                textoTipo = `Transferencia a ${t.receiver_name || 'Usuario'}`;
-            }
+            label = t.receiver_identifier === datosUsuarioBanco.identificador ? `De: ${t.sender_name || 'Desconocido'}` : `A: ${t.receiver_name || 'Desconocido'}`;
         }
-        
-        const fecha = formatearFechaBanco(t.date);
-        
-        htmlTransacciones += `
+
+        html += `
             <div class="item-transaccion-banco">
-                <div class="icono-transaccion-banco ${claseCantidad}">
+                <div class="icono-transaccion-banco ${clase}">
                     <i class="fas ${icono}"></i>
                 </div>
                 <div class="info-transaccion-banco">
-                    <div class="tipo-transaccion-banco">${textoTipo}</div>
-                    <div class="fecha-transaccion-banco">${fecha}</div>
+                    <span class="tipo-transaccion-banco">${label}</span>
+                    <span class="fecha-transaccion-banco">${formatearFechaBanco(t.date)}</span>
                 </div>
-                <div class="cantidad-transaccion-banco ${claseCantidad}">${textoCantidad}</div>
+                <div class="cantidad-transaccion-banco ${clase}">${monto}</div>
             </div>
         `;
-    }
-    
-    $('#lista-transacciones-banco').html(htmlTransacciones);
-}
-
-function filtrarTransaccionesBanco(terminoBusqueda) {
-    if (!terminoBusqueda) {
-        renderizarTransaccionesBanco(todasTransaccionesBanco);
-        return;
-    }
-    
-    const filtradas = todasTransaccionesBanco.filter(t => {
-        const cantidad = Math.abs(parseFloat(t.value || 0));
-        const numeroBusqueda = parseFloat(terminoBusqueda);
-        
-        if (!isNaN(numeroBusqueda)) {
-            return cantidad.toString().includes(terminoBusqueda) || 
-                   cantidad === numeroBusqueda ||
-                   Math.floor(cantidad) === Math.floor(numeroBusqueda);
-        }
-        
-        const tipo = (t.type || '').toLowerCase();
-        const textoTipo = tipo === 'deposit' ? 'depósito' : 
-                       tipo === 'withdraw' ? 'retiro' : 
-                       tipo === 'transfer' ? 'transferencia' : '';
-        
-        return textoTipo.includes(terminoBusqueda) || 
-               cantidad.toString().includes(terminoBusqueda);
     });
-    
-    renderizarTransaccionesBanco(filtradas);
+    list.html(html);
 }
 
-function formatearFechaBanco(timestamp) {
-    if (!timestamp) return 'N/A';
+function filtrarTransaccionesBanco(q) {
+    if (!q) return renderizarTransaccionesBanco(todasTransaccionesBanco);
+    const filtered = todasTransaccionesBanco.filter(t => {
+        const val = Math.abs(parseFloat(t.value || 0)).toString();
+        const typeStr = (t.type === 'deposit' ? 'depósito' : t.type === 'withdraw' ? 'retiro' : 'transferencia');
+        return val.includes(q) || typeStr.includes(q) || (t.sender_name || '').toLowerCase().includes(q) || (t.receiver_name || '').toLowerCase().includes(q);
+    });
+    renderizarTransaccionesBanco(filtered);
+}
+
+function formatearFechaBanco(ts) {
+    if (!ts) return 'N/A';
     try {
-        let objetoFecha;
-        if (typeof timestamp === 'number' || (typeof timestamp === 'string' && /^\d+$/.test(timestamp))) {
-            if (String(timestamp).length > 10) {
-                objetoFecha = new Date(parseInt(timestamp));
-            } else {
-                objetoFecha = new Date(parseInt(timestamp) * 1000);
-            }
-        } else {
-            objetoFecha = new Date(timestamp);
+        let d = new Date(isNaN(ts) ? ts : (String(ts).length > 10 ? parseInt(ts) : parseInt(ts) * 1000));
+        if (!isNaN(d.getTime())) {
+            const m = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+            return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`;
         }
-        if (!isNaN(objetoFecha.getTime())) {
-            const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-            return `${objetoFecha.getDate()} ${meses[objetoFecha.getMonth()]} ${objetoFecha.getFullYear()}`;
-        }
-    } catch(e) {
-        console.error("Error formateando fecha:", e);
-    }
+    } catch (e) { }
     return 'N/A';
 }
 
 function renderizarFacturas(facturas) {
+    const list = $('#lista-facturas');
     if (!facturas || facturas.length === 0) {
-        $('#lista-facturas').html('<div class="estado-vacio"><i class="fas fa-check-circle"></i><p>No tienes facturas pendientes</p></div>');
+        list.html('<div class="estado-lista-vacia"><i class="fas fa-check-double"></i><p>¡Todo en orden! No tienes facturas pendientes de pago en este momento.</p></div>');
         return;
     }
-    
-    let htmlFacturas = '';
-    facturas.forEach(function(factura) {
-        const cantidad = parseFloat(factura.amount || 0);
-        const etiqueta = factura.label || factura.society || factura.sender || 'Factura';
-        const id = factura.id || factura.billid || 0;
-        
-        htmlFacturas += `
+
+    let html = '';
+    facturas.forEach(f => {
+        const amt = parseFloat(f.amount || 0);
+        const l = f.label || 'Concepto no especificado';
+        const soc = f.society || 'Empresa Privada';
+        const snd = f.sender || 'Administración';
+        const id = f.id || f.billid || 0;
+
+        html += `
             <div class="tarjeta-factura">
-                <div class="info-factura">
-                    <div class="etiqueta-factura">${etiqueta}</div>
-                    <div class="cantidad-factura">$${cantidad.toLocaleString()}</div>
+                <div class="seccion-info-factura">
+                    <div class="cabecera-factura">
+                        <span class="sociedad-factura">${soc}</span>
+                        <span class="emisor-factura">Emitido por: ${snd}</span>
+                    </div>
+                    <span class="etiqueta-factura">${l}</span>
                 </div>
-                <button class="boton-pagar-factura" onclick="pagarFactura(${id})">
-                    <i class="fas fa-check"></i>
-                    Pagar
-                </button>
+                <div class="seccion-pago-factura">
+                    <span class="cantidad-factura">$${amt.toLocaleString()}</span>
+                    <button class="boton-pagar-factura" onclick="pagarFactura(${id})">Pagar Ahora</button>
+                </div>
             </div>
         `;
     });
-    
-    $('#lista-facturas').html(htmlFacturas);
+    list.html(html);
 }
 
 function cargarFacturas() {
-    $('#lista-facturas').html('<div class="estado-vacio"><i class="fas fa-spinner fa-spin"></i><p>Cargando facturas...</p></div>');
-    
-    $.post('https://e-tablet/obtenerFacturas', JSON.stringify({}), function(facturas) {
-        renderizarFacturas(facturas);
-    }).fail(function() {
-        $('#lista-facturas').html('<div class="estado-vacio"><i class="fas fa-exclamation-circle"></i><p>Error al cargar facturas</p></div>');
+    $('#lista-facturas').html('<div class="estado-lista-vacia"><i class="fas fa-spinner fa-spin"></i><p>Sincronizando recibos pendientes...</p></div>');
+    $.post('https://e-tablet/obtenerFacturas', JSON.stringify({}), renderizarFacturas).fail(() => {
+        $('#lista-facturas').html('<div class="estado-lista-vacia"><i class="fas fa-exclamation-triangle"></i><p>Error de conexión con el servidor de facturación</p></div>');
     });
 }
 
 function pagarFactura(id) {
     reproducirSonido('click');
-    $.post('https://e-tablet/pagarFactura', JSON.stringify({id: id}), function(respuesta) {
-        if (respuesta && respuesta.exito !== false) {
-            mostrarNotificacion('exito', 'Factura pagada exitosamente');
+    $.post('https://e-tablet/pagarFactura', JSON.stringify({ id: id }), function (r) {
+        if (r && r.exito !== false) {
+            mostrarNotificacion('exito', 'Transacción completada: Factura pagada');
             cargarFacturas();
         } else {
-            mostrarNotificacion('error', 'Error al pagar la factura');
+            mostrarNotificacion('error', 'Fondos insuficientes o error en la transacción');
         }
-    }).fail(function() {
-        mostrarNotificacion('error', 'Error al pagar la factura');
-    });
+    }).fail(() => mostrarNotificacion('error', 'Error de comunicación bancaria'));
 }
 
 window.pagarFactura = pagarFactura;
 
-function mostrarNotificacion(tipo, mensaje) {
-    const notificacion = $(`
-        <div class="notificacion notificacion-${tipo}">
-            <i class="fas fa-${tipo === 'exito' ? 'check-circle' : 'exclamation-circle'}"></i>
-            <span>${mensaje}</span>
-        </div>
-    `);
-    
-    $('body').append(notificacion);
-    
+function mostrarNotificacion(t, m) {
+    const n = $(`<div class="notificacion notificacion-${t}"><i class="fas fa-${t === 'exito' ? 'check-circle' : 'exclamation-circle'}"></i><span>${m}</span></div>`);
+    $('body').append(n);
+    setTimeout(() => n.addClass('mostrar'), 100);
     setTimeout(() => {
-        notificacion.addClass('mostrar');
-    }, 100);
-    
-    setTimeout(() => {
-        notificacion.removeClass('mostrar');
-        setTimeout(() => {
-            notificacion.remove();
-        }, 300);
-    }, 3000);
+        n.removeClass('mostrar');
+        setTimeout(() => n.remove(), 500);
+    }, 4000);
 }
