@@ -4,10 +4,11 @@ Sistema basico de tablet para FiveM QB/ESX
 
 ## FOTOS DE LA TABLET 
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50840d52-78dc-4ffd-a8bb-e27e67ca29f4" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/07edadf8-d1d4-4df8-b074-50bb2ea70eff" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f46c01cc-36b5-48ce-adcb-61647f082848" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2e1cfcbc-51a9-4301-9b6e-c6ce77adf474" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8b802233-6ee5-4b80-8972-703c43b1fd00" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d9f78b1b-14a6-490f-ae39-a891e08d182e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3c4c6117-f8b4-43ee-a7d6-92fd1a111050" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/15f83c95-3ab9-4174-82f9-dbebb5231e16" />
+
 
 ## ✨ Características
 
