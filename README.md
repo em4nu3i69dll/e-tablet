@@ -2,6 +2,10 @@
 
 Sistema basico de tablet para FiveM QB/ESX 
 
+<img width="1405" height="925" alt="image" src="https://github.com/user-attachments/assets/e6c48013-5054-4b9c-8fd6-065b0a8df7f9" />
+<img width="1385" height="892" alt="image" src="https://github.com/user-attachments/assets/d421df5b-78f0-4c43-8262-e80fe3de3ebb" />
+
+
 ## FOTOS DE LA TABLET 
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8b802233-6ee5-4b80-8972-703c43b1fd00" />
